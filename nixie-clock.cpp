@@ -81,6 +81,7 @@ int main() {
     const wchar_t *path = L"pics\final.png";
     int result;
     result = SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, (void *)path, SPIF_UPDATEINIFILE);
+	//int result = SystemParametersInfo( SPI_SETDESKWALLPAPER, 0, L"pics\final.png", SPIF_SENDCHANGE); //Would this alone work?
     if (result==true) {
 		cout << "Changed wallpaper successfully" << "\n";
 	}else{
