@@ -46,16 +46,16 @@ int main(int argc,char **argv) { //arguments are for imagemagick, not sure if ne
 		//Do things
 		
 		//Vars
-		int loc = 410; //Image location (inside the big image
-		int y = 360; //?
+		int x = 410; //xoffset?
+		int y = 360; //yoffset?
 		int imgNum = 0; //image number
 		
 		if (get_digit_count(hour)) == 1) { //If there is only one digit in the hours?
-            //image.composite(image_to_overlay, xoffset, yoffset[, OverCompositeOp])?
+            //image.composite(image_to_overlay, xoffset, yoffset, OverCompositeOp)?
 			//https://imagemagick.org/Magick++/tutorial/Magick++_tutorial.pdf#page=21
 			//https://imagemagick.org/script/composite.php
 			//https://superuser.com/questions/1581256/how-to-overlay-two-images-with-position-and-scale-in-imagemagick
-			image.append("blank.png"); //somehow add blank.png image to the big image - i don't know if append exists - also specify the location
+			image.composite("blank.png",x,y,OverCompositeOp); //somehow add blank.png image to the big image - also specify the location
 		}
         for (imgNum=0;i<2;i++) {
             image.append(v); //?
