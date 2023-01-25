@@ -1,18 +1,18 @@
 #include <iostream>
 #include <ctime>		//For getting time
-#include <windows.h>	//For changing wallpaper
-//#include <stdlib.h>	//For linux cmd to use a cmd command to change wallpaper
-#include "C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\include\Magick++.h" //<Magick++.h>	//For editing the image
+//#include <windows.h>	//For changing wallpaper
+#include <stdlib.h>	//For linux cmd to use a cmd command to change wallpaper
+#include <Magick++.h> //"C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\include\Magick++.h"	//For editing the image
 //Ok... Tuolla se tunnistaa sen. Mutta imagemagick kansioissa ne header tiedostojen polut vaikuttaa olevan väärin laitetut. Jos niitä alkaa muuttaa, ongelma katoaa ja siirtyy seuraavaan. Mutta niitä on niin paljon, että turha aloittaa sellaista.
 //#include <chrono>		//Not necessary probably
 
-//using namespace Magick;
+using namespace Magick;
 using namespace std;
 
-int main(int /*argc*/,char **argv) { //arguments are for imagemagick, not sure if necessary
+int main(/*int argc,char **argv*/) { //arguments are for imagemagick, not sure if necessary
 	
 	//Initialize imagemagick (not sure if necessary)
-	InitializeMagick('C:\Program Files\ImageMagick-7.1.0-Q16-HDRI'); //*argv //C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\include
+	//InitializeMagick(*argv); //C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\
 	
 	//GET TIME - Move this to a different script?
 	time_t currentTime;
@@ -42,20 +42,21 @@ int main(int /*argc*/,char **argv) { //arguments are for imagemagick, not sure i
 	
 	//Construct the image object
 	Image image;
+	Image clocknum;
 	
 	try {
-		//Read a file into image object
-		image.read("pics/bg.png");
 		
-		//Do things
+		//Read a file into image object
+		image.read("pics/bg.png");			//Background image
+		clocknum.read("pics/blank.png");	//Nixie tube (clock number)
 		
 		//Vars
-		int x = 410; //xoffset?
-		int y = 360; //yoffset?
-		int imgNum = 0; //image number
-		
+		int x = 410; 	//image x position
+		int y = 360; 	//image y position
+		int imgNum = 0;	//image number
+
 		//Testing
-		image.composite("blank.png",x,y,OverCompositeOp);
+		image.composite(clocknum,x,y,OverCompositeOp);
 		
 		/*if (get_digit_count(hour)) == 1) { //If there is only one digit in the hours?
             //image.composite(image_to_overlay, xoffset, yoffset, OverCompositeOp)?
@@ -84,10 +85,10 @@ int main(int /*argc*/,char **argv) { //arguments are for imagemagick, not sure i
 		*/
 		
 		//Write the image to a file
-		image.write("final.png");
+		image.write("pics/final.png");
 		
 	}
-	catch(Exception %error_) {
+	catch(Exception &error_) {
 		cout << "Caught exception: " << error_.what() << "\n";
 		return 1;
 	}
@@ -95,7 +96,7 @@ int main(int /*argc*/,char **argv) { //arguments are for imagemagick, not sure i
 	
 	//SET WALLPAPER
 	
-	//In windows
+	/*/In windows
     const wchar_t *path = L"pics\final.png";
     int result;
     result = SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, (void *)path, SPIF_UPDATEINIFILE);
@@ -104,11 +105,11 @@ int main(int /*argc*/,char **argv) { //arguments are for imagemagick, not sure i
 		cout << "Changed wallpaper successfully" << "\n";
 	}else{
 		cout << "Could not change wallpaper" << "\n";
-	}
+	}*/
 	
 	//In gnome (linux) (change the file location)
-	//system(gsettings set org.gnome.desktop.background picture-uri file:////usr/share/backgrounds/ubuntu-default-greyscale-wallpaper.png)
-	
+	//system(gsettings set org.gnome.desktop.background picture-uri 'file:////usr/share/backgrounds/ubuntu-default-greyscale-wallpaper.png');
+	cout << "Set wallpaper";
 	
 	return 0;
 	
@@ -123,3 +124,5 @@ int get_digit_count(int number) {
    }
    return count;
 }
+
+//g++ nixie-clock.cpp `Magick++-config --cxxflags --cppflags --ldflags --libs`
