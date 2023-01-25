@@ -2,16 +2,17 @@
 #include <ctime>		//For getting time
 #include <windows.h>	//For changing wallpaper
 //#include <stdlib.h>	//For linux cmd to use a cmd command to change wallpaper
+#include "C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\include\Magick++.h" //<Magick++.h>	//For editing the image
+//Ok... Tuolla se tunnistaa sen. Mutta imagemagick kansioissa ne header tiedostojen polut vaikuttaa olevan väärin laitetut. Jos niitä alkaa muuttaa, ongelma katoaa ja siirtyy seuraavaan. Mutta niitä on niin paljon, että turha aloittaa sellaista.
 //#include <chrono>		//Not necessary probably
-//#include <Magick++.h>	//For editing the image
 
 //using namespace Magick;
 using namespace std;
 
-int main(int argc,char **argv) { //arguments are for imagemagick, not sure if necessary
+int main(int /*argc*/,char **argv) { //arguments are for imagemagick, not sure if necessary
 	
 	//Initialize imagemagick (not sure if necessary)
-	InitializeMagick(*argv);
+	InitializeMagick('C:\Program Files\ImageMagick-7.1.0-Q16-HDRI'); //*argv //C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\include
 	
 	//GET TIME - Move this to a different script?
 	time_t currentTime;
@@ -36,6 +37,9 @@ int main(int argc,char **argv) { //arguments are for imagemagick, not sure if ne
 	
 	//CREATE WALLPAPER IMAGE
 	
+	//Another option would be to use batch or bash - with gimp for example (the AI could use it for converting files to other formats for example (e.g.: https://www.gimp.org/tutorials/AutomatedJpgToXcf/))
+	//system("mybatchfile.bat"); or system("mybashfile.sh"); for linux
+	
 	//Construct the image object
 	Image image;
 	
@@ -50,7 +54,10 @@ int main(int argc,char **argv) { //arguments are for imagemagick, not sure if ne
 		int y = 360; //yoffset?
 		int imgNum = 0; //image number
 		
-		if (get_digit_count(hour)) == 1) { //If there is only one digit in the hours?
+		//Testing
+		image.composite("blank.png",x,y,OverCompositeOp);
+		
+		/*if (get_digit_count(hour)) == 1) { //If there is only one digit in the hours?
             //image.composite(image_to_overlay, xoffset, yoffset, OverCompositeOp)?
 			//https://imagemagick.org/Magick++/tutorial/Magick++_tutorial.pdf#page=21
 			//https://imagemagick.org/script/composite.php
@@ -74,9 +81,11 @@ int main(int argc,char **argv) { //arguments are for imagemagick, not sure if ne
 		}
         for v in str(start.second):
             pics.append(v)
+		*/
 		
 		//Write the image to a file
 		image.write("final.png");
+		
 	}
 	catch(Exception %error_) {
 		cout << "Caught exception: " << error_.what() << "\n";
