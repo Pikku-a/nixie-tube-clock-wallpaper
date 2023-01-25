@@ -1,17 +1,15 @@
 #include <iostream>
 #include <ctime>		//For getting time
 //#include <windows.h>	//For changing wallpaper
-#include <stdlib.h>	//For linux cmd to use a cmd command to change wallpaper
-#include <Magick++.h> //"C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\include\Magick++.h"	//For editing the image
-//Ok... Tuolla se tunnistaa sen. Mutta imagemagick kansioissa ne header tiedostojen polut vaikuttaa olevan väärin laitetut. Jos niitä alkaa muuttaa, ongelma katoaa ja siirtyy seuraavaan. Mutta niitä on niin paljon, että turha aloittaa sellaista.
-//#include <chrono>		//Not necessary probably
+#include <stdlib.h>		//For linux cmd to use a cmd command to change wallpaper
+#include <Magick++.h>	//For editing the image		//"C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\include\Magick++.h"
 
 using namespace Magick;
 using namespace std;
 
-int main(/*int argc,char **argv*/) { //arguments are for imagemagick, not sure if necessary
+int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only necessary for windows
 	
-	//Initialize imagemagick (not sure if necessary)
+	//Initialize imagemagick (only necessary for windows)
 	//InitializeMagick(*argv); //C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\
 	
 	//GET TIME - Move this to a different script?
@@ -26,13 +24,6 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, not sure i
 	int sec = localTime->tm_sec;
 
 	cout << "Current time is : " << hour << ":" << min << ":" << sec << "\n";
-	
-	/*time_t t = time(0); //Get time
-	time_t t2 = chrono::system_clock::to_time_t(chrono::system_clock::now());
-	t3 = now.time_of_day().hours;
-	cout << "Time 1: " << ctime(&t) << "\n";
-	cout << "Time 2: " << ctime(&t2) << "\n";
-	cout << "Time 3: " << t3 << "\n";*/
 	
 	
 	//CREATE WALLPAPER IMAGE
@@ -50,7 +41,7 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, not sure i
 		image.read("pics/bg.png");			//Background image
 		clocknum.read("pics/blank.png");	//Nixie tube (clock number)
 		
-		//Vars
+		//Variables
 		int x = 410; 	//image x position
 		int y = 360; 	//image y position
 		int imgNum = 0;	//image number
@@ -109,7 +100,7 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, not sure i
 	
 	//In gnome (linux) (change the file location)
 	//system(gsettings set org.gnome.desktop.background picture-uri 'file:////usr/share/backgrounds/ubuntu-default-greyscale-wallpaper.png');
-	cout << "Set wallpaper";
+	cout << "Set wallpaper" << "\n";
 	
 	return 0;
 	
