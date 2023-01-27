@@ -3,6 +3,7 @@
 //#include <windows.h>	//For changing wallpaper
 #include <stdlib.h>		//For linux cmd to use a cmd command to change wallpaper
 #include <Magick++.h>	//For editing the image		//"C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\include\Magick++.h"
+#include <string>
 
 using namespace Magick;
 using namespace std;
@@ -42,38 +43,43 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 		clocknum.read("pics/blank.png");	//Nixie tube (clock number)
 		
 		//Variables
-		int x = 410; 	//image x position
-		int y = 360; 	//image y position
-		int imgNum = 0;	//image number
-
+		int x = 410; 		//image x position
+		int y = 360; 		//image y position
+		string imgnums[8] = {"blank","blank","period","blank","blank","period","blank","blank"};
+		
+		//Convert numbers to string and add them to the array
+		string s = to_string(hour);
+		for (int i = 0; i < s.size(); i++){
+			imgnums[i] = s[i];
+			cout << s[i] << "\n";
+		}
+		s = to_string(min);
+		for (int i=0;i<s.size();i++) {
+			imgnums[i+3] = s[i]; //Should the i+3 take into account that there might be only 1 number? Same to seconds (and hours?)
+			cout << s[i] << "\n";
+		}
+		s = to_string(sec);
+		for (int i=0;i<s.size();i++) {
+			imgnums[i+6] = s[i];
+			cout << s[i] << "\n";
+		}
+		
 		//Testing
-		image.composite(clocknum,x,y,OverCompositeOp);
+		//image.composite(clocknum,x,y,OverCompositeOp);
 		
-		/*if (get_digit_count(hour)) == 1) { //If there is only one digit in the hours?
-            //image.composite(image_to_overlay, xoffset, yoffset, OverCompositeOp)?
-			//https://imagemagick.org/Magick++/tutorial/Magick++_tutorial.pdf#page=21
-			//https://imagemagick.org/script/composite.php
-			//https://superuser.com/questions/1581256/how-to-overlay-two-images-with-position-and-scale-in-imagemagick
-			image.composite("blank.png",x,y,OverCompositeOp); //somehow add blank.png image to the big image - also specify the location
-		}
-        for (imgNum=0;i<2;i++) {
-            image.append(v); //?
-		}
-        image.append("period.png")
+		/*/Convert every 0 to blank
+		for (int i=0;i<8;i++) {
+			if (imgnums[i] == "0") {
+				imgnums[i] = "blank";
+			}
+		}*/
 		
-		if (get_digit_count(min)) == 1) {
-            //pics.append("blank.png");
+		//Paste the number images to the background image
+		for (int i=0;i<5;i++) {
+			x+=140;
+			clocknum.read("pics/"+imgnums[i]+".png");
+			image.composite(clocknum,x,y,OverCompositeOp);
 		}
-        for v in str(start.minute):
-            //pics.append(v)
-        //pics.append("period.png")
-		
-		if (get_digit_count(sec)) == 1) {
-            //pics.append("blank.png");
-		}
-        for v in str(start.second):
-            pics.append(v)
-		*/
 		
 		//Write the image to a file
 		image.write("pics/final.png");
@@ -100,13 +106,13 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 	
 	//In gnome (linux) (change the file location)
 	//system(gsettings set org.gnome.desktop.background picture-uri 'file:////usr/share/backgrounds/ubuntu-default-greyscale-wallpaper.png');
-	cout << "Set wallpaper" << "\n";
+	cout << "Wallpaper set" << "\n";
 	
 	return 0;
 	
 }
 
-//get_digit_amount script
+//Get amount of digits in number
 int get_digit_count(int number) {
    int count = 0;
    while(number != 0) {
@@ -115,5 +121,6 @@ int get_digit_count(int number) {
    }
    return count;
 }
+
 
 //g++ nixie-clock.cpp `Magick++-config --cxxflags --cppflags --ldflags --libs`
