@@ -19,6 +19,8 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 	
 	while(true) {
 		
+		//Check here if wallpaper is visible or if there is no active window and only execute code if it's true
+		
 		//GET TIME - Move this to a different script?
 		time_t currentTime;
 		struct tm *localTime;
@@ -45,7 +47,7 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 		try {
 			
 			//Read a file into image object
-			image.read("pics/bg.png");			//Background image
+			image.read("pics/final.png");		//Background image (originally bg.png was used, but I changed it so the period.png:s don't need to be added every time. But does this actually worsen performance, because the final.png has larger size?)
 			clocknum.read("pics/blank.png");	//Nixie tube (clock number)
 			
 			//Variables
@@ -81,27 +83,21 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 			for (int i=0;i<s.size();i++) {
 				if (get_digit_count(sec) == 1) {
 					imgnums[i+6] = "blank";
-					imgnums[i+7] = s[i];
+					imgnums[i+7] = s[i]; //In seconds when it's 0 it draws it to the wrong position for some reason
 				}else{
 					imgnums[i+6] = s[i];
 				}
 				//cout << s[i] << "\n";
 			}
 			
-			/*/Convert every 0 to blank
-			for (int i=0;i<8;i++) {
-				if (imgnums[i] == "0") {
-					imgnums[i] = "blank";
-				}
-			}*/
-			
 			//Paste the number images to the background image
 			for (int i=0;i<8;i++) {
 				x+=140;
-				clocknum.read("pics/"+imgnums[i]+".png");
-				image.composite(clocknum,x,y,OverCompositeOp);
-				//cout << "Composite image " << imgnums[i] << "\n";
-				//Maybe predraw the blank and period images to the background so less stuff needs to be drawn every second?
+				if (i != 2 && i != 5) { //Don't draw the period.png images to the background so less stuff needs to be drawn every second
+					clocknum.read("pics/"+imgnums[i]+".png");
+					image.composite(clocknum,x,y,OverCompositeOp);
+					//cout << "Composite image " << imgnums[i] << "\n";
+				}
 			}
 			
 			//Write the image to a file
