@@ -50,7 +50,7 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 			
 			//Variables
 			int x = 290; 		//image x position (410 originally)
-			int y = 360; 		//image y position
+			int y = 420; 		//image y position (360 originally)
 			string imgnums[8] = {"blank","blank","period","blank","blank","period","blank","blank"};
 			
 			//Convert numbers to string and add them to the array
@@ -105,7 +105,7 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 			}
 			
 			//Write the image to a file
-			image.write("/usr/share/backgrounds/final.png"); //"pics/final.png"
+			image.write("/usr/share/backgrounds/final.png"); //"pics/final.png" - Currently this is the linux version. Also it needs administrator priviledges (so consider changing the save folder).
 			
 		}
 		catch(Exception &error_) {
@@ -133,7 +133,7 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 		cout << "Wallpaper set" << "\n";
 		
 		//Execute everything only every second for better performance
-		this_thread::sleep_for(chrono::milliseconds(1000));
+		this_thread::sleep_for(chrono::milliseconds(1000)); //Maybe make the number a little lower so it doesn't skip seconds (sometimes rarely)
 		
 	}
 	return 0;
