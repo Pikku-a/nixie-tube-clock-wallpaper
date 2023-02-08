@@ -1,8 +1,12 @@
+
+// Nixie tube clock live wallpaper
+// © Pikku-a 2023
+
 #include <iostream>
 #include <ctime>		//For getting time
 //#include <windows.h>	//For changing wallpaper
 #include <stdlib.h>		//For linux cmd to use a cmd command to change wallpaper
-#include <Magick++.h>	//For editing the image		//"C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\include\Magick++.h"
+#include <Magick++.h>	//For editing the image		//"C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\include\Magick++.h" ?
 #include <string>
 #include <chrono>		//This and the one below are for sleep_for milliseconds
 #include <thread>
@@ -19,7 +23,7 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 	
 	while(true) {
 		
-		//Check here if wallpaper is visible or if there is no active window and only execute code if it's true
+		//Check here if wallpaper is visible or if there is no active window and only execute code if it's true? (couldn't find a way to do this in linux (at least not in wayland))
 		
 		//GET TIME - Move this to a different script?
 		time_t currentTime;
@@ -93,7 +97,7 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 			//Paste the number images to the background image
 			for (int i=0;i<8;i++) {
 				x+=140;
-				if (i != 2 && i != 5) { //Don't draw the period.png images to the background so less stuff needs to be drawn every second
+				if (i != 2 && i != 5) { //Don't draw the period.png images to the background so less stuff needs to be drawn every second (do this only if using final.png as base image)
 					clocknum.read("pics/"+imgnums[i]+".png");
 					image.composite(clocknum,x,y,OverCompositeOp);
 					//cout << "Composite image " << imgnums[i] << "\n";
@@ -101,7 +105,7 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 			}
 			
 			//Write the image to a file
-			image.write("/usr/share/backgrounds/final.png"); //"pics/final.png" - Currently this is the linux version. Also it needs administrator priviledges (so consider changing the save folder).
+			image.write("/usr/share/backgrounds/final.png"); // "pics/final.png" - Currently this is the linux version. Also it needs administrator priviledges (so consider changing the save folder).
 			
 		}
 		catch(Exception &error_) {
@@ -124,12 +128,13 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 		}*/
 		
 		//In gnome (linux)
-		system("gsettings set org.gnome.desktop.background picture-uri 'file:////usr/share/backgrounds/final.png'");
+		system("gsettings set org.gnome.desktop.background picture-uri 'file:////usr/share/backgrounds/final.png'"); // 'pics/final.png'
+		//Add alternatives to linux distributions that don't use gnome?
 		
 		cout << "Wallpaper set" << "\n";
 		
-		//Execute everything only every second for better performance
-		this_thread::sleep_for(chrono::milliseconds(1000)); //Maybe make the number a little lower so it doesn't skip seconds (sometimes rarely)
+		//Execute everything only every 800 milliseconds for better performance
+		this_thread::sleep_for(chrono::milliseconds(800)); //Maybe make the number a little lower so it doesn't skip seconds (sometimes rarely)
 		
 	}
 	return 0;
@@ -146,4 +151,4 @@ int get_digit_count(int number) {
    return count;
 }
 
-//g++ nixie-clock.cpp `Magick++-config --cxxflags --cppflags --ldflags --libs`
+//g++ -o nixie-clock nixie-clock.cpp `Magick++-config --cxxflags --cppflags --ldflags --libs`
