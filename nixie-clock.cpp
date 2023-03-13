@@ -51,7 +51,7 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 		try {
 			
 			//Read a file into image object
-			image.read("pics/final.png");		//Background image (originally bg.png was used, but I changed it so the period.png:s don't need to be added every time. But does this actually worsen performance, because the final.png has larger size?)
+			image.read("pics/bg.png");		//Background image (originally bg.png was used, but I changed it so the period.png:s don't need to be added every time. But does this actually worsen performance, because the final.png has larger size?)
 			clocknum.read("pics/blank.png");	//Nixie tube (clock number)
 			
 			//Variables
@@ -97,11 +97,11 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 			//Paste the number images to the background image
 			for (int i=0;i<8;i++) {
 				x+=140;
-				if (i != 2 && i != 5) { //Don't draw the period.png images to the background so less stuff needs to be drawn every second (do this only if using final.png as base image)
+				//if (i != 2 && i != 5) { //Don't draw the period.png images to the background so less stuff needs to be drawn every second (do this only if using final.png as base image)
 					clocknum.read("pics/"+imgnums[i]+".png");
 					image.composite(clocknum,x,y,OverCompositeOp);
 					//cout << "Composite image " << imgnums[i] << "\n";
-				}
+				//}
 			}
 			
 			//Write the image to a file
@@ -150,5 +150,8 @@ int get_digit_count(int number) {
    }
    return count;
 }
+
+//It seems that sometimes the background has to be changed manuall first before this works
+//Like on cmd: gsettings set org.gnome.desktop.background picture-uri 'file:////usr/share/backgrounds/final.png'
 
 //g++ -o nixie-clock nixie-clock.cpp `Magick++-config --cxxflags --cppflags --ldflags --libs`
