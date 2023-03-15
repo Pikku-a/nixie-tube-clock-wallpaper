@@ -3,23 +3,43 @@
 // © Pikku-a 2023
 
 #include <iostream>
-#include <ctime>		//For getting time
-//#include <windows.h>	//For changing wallpaper
-#include <stdlib.h>		//For linux cmd to use a cmd command to change wallpaper
-#include <Magick++.h>	//For editing the image		//"C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\include\Magick++.h" ?
+#include <ctime>			//For getting time
+//#include <windows.h>		//For changing wallpaper
+#include <stdlib.h>			//For linux cmd to use a cmd command to change wallpaper
+#include <Magick++.h>		//For editing the image		//"C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\include\Magick++.h" ?
 #include <string>
-#include <chrono>		//This and the one below are for sleep_for milliseconds
+#include <chrono>			//This and the one below are for sleep_for milliseconds
 #include <thread>
+#include <unistd.h>			//This
+#include <linux/limits.h>	//and this are for getting the path to the program directory
 
 using namespace Magick;
 using namespace std;
 
 int get_digit_count(int number);
 
+string get_selfpath() {
+    char buff[PATH_MAX];
+    ssize_t len = ::readlink("/proc/self/exe", buff, sizeof(buff)-1);
+    if (len != -1) {
+		buff[len] = '\0';
+		return string(buff);
+    }else{
+		return "Failed to get path";
+	}
+}
+		
 int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only necessary for windows
 	
 	//Initialize imagemagick (only necessary for windows)
 	//InitializeMagick(*argv); //C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\
+	
+	//Get path to program directory and add "/pics/final.png" to it
+	string selfpath = get_selfpath();
+	string::size_type t = selfpath.find_last_of("/");
+	selfpath = selfpath.substr(0,t);
+	selfpath = selfpath+"/pics/final.png";
+	cout << "Path to program and final.png: " << selfpath << "\n";
 	
 	while(true) {
 		
@@ -43,6 +63,7 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 		
 		//Another option would be to use batch or bash - with gimp for example (the AI could use it for converting files to other formats for example (e.g.: https://www.gimp.org/tutorials/AutomatedJpgToXcf/))
 		//system("mybatchfile.bat"); or system("mybashfile.sh"); for linux
+		//If someone else than me is reading this, just ignore these comments.
 		
 		//Construct the image object
 		Image image;
@@ -51,7 +72,7 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 		try {
 			
 			//Read a file into image object
-			image.read("pics/bg.png");		//Background image (originally bg.png was used, but I changed it so the period.png:s don't need to be added every time. But does this actually worsen performance, because the final.png has larger size?)
+			image.read("pics/bg.png");		//Background image (originally bg.png was used, but I changed it so the period.png:s don't need to be added every time. EDIT: Changed it back for now.)
 			clocknum.read("pics/blank.png");	//Nixie tube (clock number)
 			
 			//Variables
@@ -87,7 +108,7 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 			for (int i=0;i<s.size();i++) {
 				if (get_digit_count(sec) == 1) {
 					imgnums[i+6] = "blank";
-					imgnums[i+7] = s[i]; //In seconds when it's 0 it draws it to the wrong position for some reason
+					imgnums[i+7] = s[i]; //In seconds when it's 0 it draws it to the wrong position for some reason (does the same happen to minutes and hours?)
 				}else{
 					imgnums[i+6] = s[i];
 				}
@@ -105,7 +126,7 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 			}
 			
 			//Write the image to a file
-			image.write("/usr/share/backgrounds/final.png"); // "pics/final.png" - Currently this is the linux version. Also it needs administrator priviledges (so consider changing the save folder).
+			image.write("pics/final.png"); // "/usr/share/backgrounds/final.png"
 			
 		}
 		catch(Exception &error_) {
@@ -128,7 +149,7 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 		}*/
 		
 		//In gnome (linux)
-		system("gsettings set org.gnome.desktop.background picture-uri 'file:////usr/share/backgrounds/final.png'"); // 'pics/final.png'
+		system(("gsettings set org.gnome.desktop.background picture-uri "+selfpath).c_str()); // 'pics/final.png' //'file:////usr/share/backgrounds/final.png'
 		//Add alternatives to linux distributions that don't use gnome?
 		
 		cout << "Wallpaper set" << "\n";
@@ -152,6 +173,8 @@ int get_digit_count(int number) {
 }
 
 //It seems that sometimes the background has to be changed manuall first before this works
-//Like on cmd: gsettings set org.gnome.desktop.background picture-uri 'file:////usr/share/backgrounds/final.png'
+//Like on cmd: gsettings set org.gnome.desktop.background picture-uri 'path/to/final.png'
+
+//The program can be stopped from terminal with "pkill nixie-clock" - Maybe add some easier way to do it (for example a keyboard shortcut)
 
 //g++ -o nixie-clock nixie-clock.cpp `Magick++-config --cxxflags --cppflags --ldflags --libs`
