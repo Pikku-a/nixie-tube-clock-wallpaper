@@ -32,12 +32,15 @@ string get_selfpath() {
 int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only necessary for windows
 	
 	//Initialize imagemagick (only necessary for windows)
-	//InitializeMagick(*argv); //C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\
+	//InitializeMagick(*argv); //C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\ 
+	
+	Magick::InitializeMagick(nullptr);
 	
 	//Get path to program directory and add "/pics/final.png" to it
 	string selfpath = get_selfpath();
 	string::size_type t = selfpath.find_last_of("/");
 	selfpath = selfpath.substr(0,t);
+	string selfpathFolder = selfpath;
 	selfpath = selfpath+"/pics/final.png";
 	cout << "Path to program and final.png: " << selfpath << "\n";
 	
@@ -72,8 +75,8 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 		try {
 			
 			//Read a file into image object
-			image.read("pics/bg.png");		//Background image (originally bg.png was used, but I changed it so the period.png:s don't need to be added every time. EDIT: Changed it back for now.)
-			clocknum.read("pics/blank.png");	//Nixie tube (clock number)
+			image.read(selfpathFolder+"/pics/bg.png");		//Background image (originally bg.png was used, but I changed it so the period.png:s don't need to be added every time. EDIT: Changed it back for now.)
+			clocknum.read(selfpathFolder+"/pics/blank.png");	//Nixie tube (clock number)
 			
 			//Variables
 			int x = 290; 		//image x position (410 originally)
@@ -119,14 +122,14 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 			for (int i=0;i<8;i++) {
 				x+=140;
 				//if (i != 2 && i != 5) { //Don't draw the period.png images to the background so less stuff needs to be drawn every second (do this only if using final.png as base image)
-					clocknum.read("pics/"+imgnums[i]+".png");
+					clocknum.read(selfpathFolder+"/pics/"+imgnums[i]+".png");
 					image.composite(clocknum,x,y,OverCompositeOp);
 					//cout << "Composite image " << imgnums[i] << "\n";
 				//}
 			}
 			
 			//Write the image to a file
-			image.write("pics/final.png"); // "/usr/share/backgrounds/final.png"
+			image.write(selfpathFolder+"/pics/final.png"); // "/usr/share/backgrounds/final.png"
 			
 		}
 		catch(Exception &error_) {
@@ -156,6 +159,7 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 		
 		//Execute everything only every 800 milliseconds for better performance
 		this_thread::sleep_for(chrono::milliseconds(800)); //Maybe make the number a little lower so it doesn't skip seconds (sometimes rarely)
+		//Also use a variable so it's easier to change?
 		
 	}
 	return 0;
