@@ -10,13 +10,13 @@ The images are not mine, I got them from here: https://github.com/MKSanic/diverg
 
 ## How to use it
 
-1. Run it
+### 1. Run it
 
 Right click the file named nixie-clock and select "execute".
 Or open the terminal in the folder of the program and write ./nixie-clock
 You might need to right click, select "Properties", go to "Permissions" tab and enable "Allow executing file as program"
 
-2. Set it as a Startup app
+### 2. Set it as a Startup app
 
 Open Startup Applications Preferences app.
 Add a new one and search for the nixie-clock program.
