@@ -1,7 +1,7 @@
 # Nixie tube clock live wallpaper
 - Inspired by the divergence meter in Steins;Gate
 - Written in c++ for good performance (not sure if the performance can be called good though)
-- Made for Linux (gnome only) - Windows stuff is commented, so uncommenting and editing it a little you could make it work on Windows
+- Made for Linux (gnome only and I have tested it only on Ubuntu) - Windows stuff is commented, so uncommenting and editing it a little you could make it work on Windows
 
 There are some bugs that I am aware of, but too lazy to fix them. If you use this and feel like fixing them, you are welcome to do so.
 
