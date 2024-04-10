@@ -19,8 +19,6 @@ The images are not mine, I got them from here: https://github.com/MKSanic/diverg
 
 Double-click the nixie-clock file.
 
-(*Alternative way 1:* Right click the file named nixie-clock and select "execute". *Alternative way 2:* open the terminal in the folder of the program and write ./nixie-clock
-
 You might need to right click, select "Properties", go to "Permissions" tab and enable "Allow executing file as program"
 
 ### 2. Set it as a Startup app
