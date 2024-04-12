@@ -3,14 +3,14 @@
 // © Pikku-a 2023-2024
 
 #include <iostream>
-#include <ctime>			// For getting time
+#include <ctime>		// For getting time
 //#include <windows.h>		// For changing wallpaper
-#include <stdlib.h>			// For linux cmd to use a cmd command to change wallpaper
+#include <stdlib.h>		// For linux cmd to use a cmd command to change wallpaper
 #include <Magick++.h>		// For editing the image		//"C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\include\Magick++.h" ?
 #include <string>
-#include <chrono>			// This and the one below are for sleep_for milliseconds
+#include <chrono>		// This and the one below are for sleep_for milliseconds
 #include <thread>
-#include <unistd.h>			// This
+#include <unistd.h>		// This
 #include <linux/limits.h>	// and this are for getting the path to the program directory
 
 using namespace Magick;
@@ -154,17 +154,23 @@ int main(/*int argc,char **argv*/) { //arguments are for imagemagick, only neces
 			cout << "Could not change wallpaper" << "\n";
 		}*/
 		
-		// Gnome - Make this more similar to Cinnamon version
-		//system(("gsettings set org.gnome.desktop.background picture-uri "+selfpath).c_str()); // 'pics/final.png' //'file:////usr/share/backgrounds/final.png'
-		// Cinnamon - In this version there is flickering. Not sure if there is anything I can do to fix that.
+		// Gnome - NOTE: Currently it changes it only on light theme - Make it use the current theme or something.
+  		int ret = system(("gsettings set org.gnome.desktop.background picture-uri file://"+selfpath).c_str());
+                //system(("gsettings set org.gnome.desktop.background picture-uri "+selfpath).c_str()); // 'pics/final.png' //'file:////usr/share/backgrounds/final.png'		
+                if (ret == -1) {
+		    cout << "Failed to set wallpaper" << "\n";
+		}else{
+		    cout << "Wallpaper set" << "\n";
+		}
+		/*/ Cinnamon - In this version there is flickering. Not sure if there is anything I can do to fix that.
 		int ret = system(("gsettings set org.cinnamon.desktop.background picture-uri file://"+selfpath).c_str());
 		if (ret == -1) {
-			cout << "Failed to set wallpaper" << "\n";
-			//cout << "The command used: " << "gsettings set org.cinnamon.desktop.background picture-uri file://" << selfpath.c_str();
+	          cout << "Failed to set wallpaper" << "\n";
+		  //cout << "The command used: " << "gsettings set org.cinnamon.desktop.background picture-uri file://" << selfpath.c_str();
 		}else{
-			cout << "Wallpaper set" << "\n";
-			//cout << ret << "\n";
-		}
+		  cout << "Wallpaper set" << "\n";
+		  //cout << ret << "\n";
+		}*/
 
 		// Execute everything only every 800 milliseconds for better performance
 		this_thread::sleep_for(chrono::milliseconds(800)); //Maybe make the number a little lower so it doesn't skip seconds (sometimes rarely)
@@ -192,4 +198,5 @@ int get_digit_count(int number) {
 
 /*
 g++ -o nixie-clock nixie-clock.cpp `Magick++-config --cxxflags --cppflags --ldflags --libs`
+graphicsmagick-libmagick-dev-compat package is needed to compile it. (And run it?)
 */
