@@ -13,7 +13,7 @@ The images are not mine, I got them from here: https://github.com/MKSanic/diverg
 ### 1. Requirements
 - Operating System: Linux
 - Desktop Environment: Gnome.
-- libgraphicsmagick++-q16-12 package (sudo apt install libgraphicsmagick++-q16-12)
+- libgraphicsmagick++-q16-12 package (`sudo apt install libgraphicsmagick++-q16-12)
 
 ### 2. Run it
 
