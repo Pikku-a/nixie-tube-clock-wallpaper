@@ -1,6 +1,7 @@
 # Nixie tube clock live wallpaper
-
-https://github.com/Pikku-a/nixie-tube-clock-wallpaper/raw/master/nixie-clock-wallpaper.webm
+<video width="320" height="240" controls>
+  <source src="nixie-clock-wallpaper.webm" type="video/webm">
+</video>
 
 - Inspired by the divergence meter in Steins;Gate
 - Written in c++ for good performance (Not sure if the performance can be called good though. It uses only about 18mb of RAM, but CPU usage is relatively high. But not as high as one similar program that I tried.)
