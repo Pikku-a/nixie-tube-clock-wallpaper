@@ -1,4 +1,4 @@
-***THIS HAS BEEN MOVED TO CODEBERG***
+***THIS HAS BEEN MOVED TO CODEBERG: https://codeberg.org/pikku-a/nixie-tube-clock-wallpaper***
 
 # Nixie tube clock live wallpaper
 ![Gif of the wallpaper in action.](https://github.com/Pikku-a/nixie-tube-clock-wallpaper/blob/master/nixie-clock-wallpaper.gif?raw=true)
